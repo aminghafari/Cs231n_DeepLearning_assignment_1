@@ -1,5 +1,6 @@
 import numpy as np
 from random import shuffle
+from sympy import KroneckerDelta
 #from past.builtins import xrange
 
 def svm_loss_naive(W, X, y, reg):
@@ -66,7 +67,7 @@ def svm_loss_vectorized(W, X, y, reg):
   Inputs and outputs are the same as svm_loss_naive.
   """
   loss = 0.0
-  dW = np.zeros(W.shape) # initialize the gradient as zero
+  #dW = np.zeros(W.shape) # initialize the gradient as zero
   num_classes = W.shape[1]
   num_train = X.shape[0]
   #############################################################################
@@ -93,7 +94,14 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  pass
+  C = np.zeros(margin.shape)
+  C [margin > 0] = 1
+  negs = np.sum(C, axis =1)
+  C[np.arange(num_train), y[np.arange(num_train)]] = -negs
+  print(C.shape)
+  dW = np.dot(X.T, C)
+  dW /= num_train
+  dW += 2*reg*W
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
