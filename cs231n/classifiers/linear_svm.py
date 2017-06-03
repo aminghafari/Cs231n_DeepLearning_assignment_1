@@ -98,7 +98,6 @@ def svm_loss_vectorized(W, X, y, reg):
   C [margin > 0] = 1
   negs = np.sum(C, axis =1)
   C[np.arange(num_train), y[np.arange(num_train)]] = -negs
-  print(C.shape)
   dW = np.dot(X.T, C)
   dW /= num_train
   dW += 2*reg*W
