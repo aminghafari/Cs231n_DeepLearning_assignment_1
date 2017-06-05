@@ -68,7 +68,7 @@ class TwoLayerNet(object):
     W1, b1 = self.params['W1'], self.params['b1']
     W2, b2 = self.params['W2'], self.params['b2']
     N, D = X.shape
-
+    H = W1.shape[1]
     # Compute the forward pass
     scores = None
     #############################################################################
@@ -76,7 +76,11 @@ class TwoLayerNet(object):
     # Store the result in the scores variable, which should be an array of      #
     # shape (N, C).                                                             #
     #############################################################################
-    pass
+    print(N,D,H)
+    S1 = np.max(0, np.dot(X, W1))
+    print(N,D,H)
+    print(S1.shape)
+    #scores = np.dtS1
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
