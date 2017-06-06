@@ -69,6 +69,7 @@ class TwoLayerNet(object):
     W2, b2 = self.params['W2'], self.params['b2']
     N, D = X.shape
     H = W1.shape[1]
+    C = W2.shape[1]
     # Compute the forward pass
     scores = None
     #############################################################################
@@ -76,11 +77,13 @@ class TwoLayerNet(object):
     # Store the result in the scores variable, which should be an array of      #
     # shape (N, C).                                                             #
     #############################################################################
-    print(N,D,H)
-    S1 = np.max(0, np.dot(X, W1))
-    print(N,D,H)
-    print(S1.shape)
-    #scores = np.dtS1
+    
+    X1 = np.dot(X, W1)
+    Sign1 = np.zeros((N, H))
+    Sign1[X1>0] = 1
+    X1 = X1*Sign1
+    
+    scores = np.dot(X1, W2)
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
@@ -90,14 +93,20 @@ class TwoLayerNet(object):
       return scores
 
     # Compute the loss
-    loss = None
+    loss = 0
     #############################################################################
     # TODO: Finish the forward pass, and compute the loss. This should include  #
     # both the data loss and L2 regularization for W1 and W2. Store the result  #
     # in the variable loss, which should be a scalar. Use the Softmax           #
     # classifier loss.                                                          #
     #############################################################################
-    pass
+    S = np.exp(scores)
+    sigS = np.sum(S, axis=1)
+    S_i = S[np.arange(N),y]
+  
+    loss +=  -np.sum(np.log(S_i/sigS))/N
+  
+    loss += reg * np.sum(W1 * W1) + reg * np.sum(W2 * W2)
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
