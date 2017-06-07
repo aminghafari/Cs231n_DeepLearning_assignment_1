@@ -116,6 +116,7 @@ class TwoLayerNet(object):
     grads['b2'] = np.zeros((C))
     grads['W2'] = np.zeros((H, C))
     grads['b1'] = np.zeros((H))
+    grads['W1'] = np.zeros((D, H))
     #############################################################################
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
@@ -142,11 +143,13 @@ class TwoLayerNet(object):
     grads['W2'] += np.dot( H1.T, dscores)
     grads['W2'] += 2*reg*W2
     
-    dH1 = np.dot(dscores, W2.T)
+    dH1 = Sign1*np.dot(dscores, W2.T)
     # db1
-    grads['b1'] += 
-    #grads['W1'] += 2*reg*W1
-    #grads['W2'] += 2*reg*W2
+    grads['b1'] += np.dot(dH1.T, np.ones((N)) )
+    
+    # dW1
+    grads['W1'] += np.dot( X.T, dH1)
+    grads['W1'] += 2*reg*W1
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
