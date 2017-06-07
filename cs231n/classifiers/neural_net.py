@@ -81,9 +81,9 @@ class TwoLayerNet(object):
     X1 = np.dot(X, W1) + b1
     Sign1 = np.zeros((N, H))
     Sign1[X1>0] = 1
-    X1 = X1*Sign1
+    H1 = X1*Sign1
     
-    scores = np.dot(X1, W2) + b2
+    scores = np.dot(H1, W2) + b2
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
@@ -115,6 +115,7 @@ class TwoLayerNet(object):
     grads = {}
     grads['b2'] = np.zeros((C))
     grads['W2'] = np.zeros((H, C))
+    grads['b1'] = np.zeros((H))
     #############################################################################
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
@@ -134,10 +135,16 @@ class TwoLayerNet(object):
     
     dscores /= N
     # db2
-    grads['b2'] += np.sum(dscores, axis = 0)
+    #grads['b2'] += np.sum(dscores, axis = 0)
+    grads['b2'] += np.dot(dscores.T, np.ones((N)) )
     # dw2
-    dscores_dw2 = np.zeros((N,C,H,C))
-    #grad['W2'] += 
+    
+    grads['W2'] += np.dot( H1.T, dscores)
+    grads['W2'] += 2*reg*W2
+    
+    dH1 = np.dot(dscores, W2.T)
+    # db1
+    grads['b1'] += 
     #grads['W1'] += 2*reg*W1
     #grads['W2'] += 2*reg*W2
     #############################################################################
