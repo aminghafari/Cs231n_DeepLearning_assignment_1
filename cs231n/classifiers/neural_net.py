@@ -113,20 +113,33 @@ class TwoLayerNet(object):
 
     # Backward pass: compute gradients
     grads = {}
-    grads['W1'] = np.zeros((D, H))
-    grads['b1'] = np.zeros(H)
-    grads['W2'] = np.zeros((H,C))
-    grads['b2'] = np.zeros(C)
-    
+    grads['b2'] = np.zeros((C))
+    grads['W2'] = np.zeros((H, C))
     #############################################################################
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
     # grads['W1'] should store the gradient on W1, and be a matrix of same size #
     #############################################################################
-    dscores = 
-    grads['b2'] += 
-    grads['W1'] += 2*reg*W1
-    grads['W2'] += 2*reg*W2
+    # dscores
+    dscores = np.zeros((N, C))
+    dscores[np.arange(N), y] = -1
+    
+    exp_scores = np.exp(scores)
+    sum_scores = np.sum(exp_scores, axis = 1)
+    
+    dscores1 = exp_scores.T/sum_scores
+    dscores1 = dscores1.T
+    
+    dscores += dscores1
+    
+    dscores /= N
+    # db2
+    grads['b2'] += np.sum(dscores, axis = 0)
+    # dw2
+    dscores_dw2 = np.zeros((N,C,H,C))
+    #grad['W2'] += 
+    #grads['W1'] += 2*reg*W1
+    #grads['W2'] += 2*reg*W2
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
