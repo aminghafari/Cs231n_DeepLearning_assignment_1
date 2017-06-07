@@ -78,12 +78,12 @@ class TwoLayerNet(object):
     # shape (N, C).                                                             #
     #############################################################################
     
-    X1 = np.dot(X, W1)
+    X1 = np.dot(X, W1) + b1
     Sign1 = np.zeros((N, H))
     Sign1[X1>0] = 1
     X1 = X1*Sign1
     
-    scores = np.dot(X1, W2)
+    scores = np.dot(X1, W2) + b2
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
@@ -113,12 +113,20 @@ class TwoLayerNet(object):
 
     # Backward pass: compute gradients
     grads = {}
+    grads['W1'] = np.zeros((D, H))
+    grads['b1'] = np.zeros(H)
+    grads['W2'] = np.zeros((H,C))
+    grads['b2'] = np.zeros(C)
+    
     #############################################################################
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
     # grads['W1'] should store the gradient on W1, and be a matrix of same size #
     #############################################################################
-    pass
+    dscores = 
+    grads['b2'] += 
+    grads['W1'] += 2*reg*W1
+    grads['W2'] += 2*reg*W2
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
