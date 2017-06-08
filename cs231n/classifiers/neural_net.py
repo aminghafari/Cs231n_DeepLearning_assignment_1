@@ -193,7 +193,9 @@ class TwoLayerNet(object):
       # TODO: Create a random minibatch of training data and labels, storing  #
       # them in X_batch and y_batch respectively.                             #
       #########################################################################
-      pass
+      idx = np.random.choice(num_train, batch_size)
+      X_batch = X[idx,:]
+      y_batch = y[idx]
       #########################################################################
       #                             END OF YOUR CODE                          #
       #########################################################################
@@ -208,7 +210,10 @@ class TwoLayerNet(object):
       # using stochastic gradient descent. You'll need to use the gradients   #
       # stored in the grads dictionary defined above.                         #
       #########################################################################
-      pass
+      self.params['b1']-= learning_rate*grads['b1']
+      self.params['W1']-= learning_rate*grads['W1']
+      self.params['b2']-= learning_rate*grads['b2']
+      self.params['W2']-= learning_rate*grads['W2']
       #########################################################################
       #                             END OF YOUR CODE                          #
       #########################################################################
@@ -253,7 +258,28 @@ class TwoLayerNet(object):
     ###########################################################################
     # TODO: Implement this function; it should be VERY simple!                #
     ###########################################################################
-    pass
+    W1, b1 = self.params['W1'], self.params['b1']
+    W2, b2 = self.params['W2'], self.params['b2']
+    N, D = X.shape
+    H = W1.shape[1]
+    C = W2.shape[1]
+    
+    X1 = np.dot(X, W1) + b1
+    Sign1 = np.zeros((N, H))
+    Sign1[X1>0] = 1
+    H1 = X1*Sign1
+    
+    scores = np.dot(H1, W2) + b2
+    
+    exp_scores = np.exp(scores)
+    sum_scores = np.sum(exp_scores, axis = 1)
+    
+    n_scores = exp_scores.T/sum_scores
+    n_scores = n_scores.T
+    
+    Y = n_scores
+    ys = np.argmax(Y, axis = 1)
+    y_pred = ys.T
     ###########################################################################
     #                              END OF YOUR CODE                           #
     ###########################################################################
